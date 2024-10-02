@@ -4,7 +4,7 @@ export interface Client {
     email: string;
     phone: string;
     address: string;
-    createdAt: string;
+    created_at: string;
 }
 
 export type ModeView = 'list' | 'detail' | 'add' | 'edit';

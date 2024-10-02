@@ -5,29 +5,29 @@ import { Eye, Plus } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ClientSearch } from './ClientSearch'
-import { Client, ModeView } from './types'
+import { Company, ModeView } from './types'
+import { CompanySearch } from './CompanySearch'
 import { formatDate } from '@/lib/utils'
 
-interface ClientListProps {
-    clients: Client[]
+interface CompanyListProps {
+    companies: Company[]
     setView: React.Dispatch<React.SetStateAction<ModeView>>
-    setSelectedClient: (client: Client) => void
+    setSelectedCompany: (company: Company) => void
     searchTerm: string
     setSearchTerm: React.Dispatch<React.SetStateAction<string>>
 }
 
-export const ClientList: React.FC<ClientListProps> = ({ clients, setView, setSelectedClient, searchTerm, setSearchTerm }) => {
+export const CompanyList: React.FC<CompanyListProps> = ({ companies, setView, setSelectedCompany, searchTerm, setSearchTerm }) => {
     return (
         <Card className="w-full bg-gray-900 text-gray-100">
             <CardHeader>
-                <CardTitle className="text-2xl font-bold">Client Management</CardTitle>
+                <CardTitle className="text-2xl font-bold">Company Management</CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="flex justify-between mb-4">
-                    <ClientSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                    <CompanySearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                     <Button onClick={() => setView('add')} className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
-                        <Plus className="mr-2 h-4 w-4" /> Add Client
+                        <Plus className="mr-2 h-4 w-4" /> Add Company
                     </Button>
                 </div>
                 <Table>
@@ -38,13 +38,14 @@ export const ClientList: React.FC<ClientListProps> = ({ clients, setView, setSel
                             <TableHead className="text-gray-300">Phone</TableHead>
                             <TableHead className="text-gray-300">Address</TableHead>
                             <TableHead className="text-gray-300">Created At</TableHead>
+                            <TableHead className="text-gray-300">Website</TableHead>
                             <TableHead className="text-gray-300">Details</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {clients.map((client) => (
-                            <TableRow key={client.id} className="border-b border-gray-800">
-                                {Object.entries(client).map(([key, value]) => {
+                        {companies.map((company) => (
+                            <TableRow key={company.id} className="border-b border-gray-800">
+                                {Object.entries(company).map(([key, value]) => {
                                     const valueCell = key === 'created_at' ? formatDate(value) : value
 
                                     if (key !== 'id') {
@@ -56,7 +57,7 @@ export const ClientList: React.FC<ClientListProps> = ({ clients, setView, setSel
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        onClick={() => { setSelectedClient(client); setView('detail'); }}
+                                        onClick={() => { setSelectedCompany(company); setView('detail'); }}
                                         className="text-gray-400 w-fit h-full px-2 hover:bg-transparent hover:text-white"
                                     >
                                         <Eye className="h-4 w-4" />
