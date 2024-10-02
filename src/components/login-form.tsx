@@ -5,8 +5,11 @@ import { Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation"
 
 export function LoginFormComponent() {
+  const router = useRouter();
+
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [formData, setFormData] = useState({
     email: "",
@@ -27,6 +30,11 @@ export function LoginFormComponent() {
 
   const handleForm = (event: FormEvent) => {
     event.preventDefault();
+    if (formData.email === "admin" && formData.password === "Admin123*") {
+      router.push('/clients');
+    } else {
+      alert("Invalid credentials. Please try again.");
+    }
   };
 
   return (
