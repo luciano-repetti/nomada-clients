@@ -34,7 +34,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
         <Card className="w-full bg-gray-900 text-gray-100">
             <CardHeader>
                 <div className="flex items-center">
-                    <Button variant="ghost" size="icon" onClick={() => setView('list')} className="text-gray-300 hover:text-white">
+                    <Button variant="ghost" size="icon" onClick={() => setView('list')} className="text-gray-300 hover:bg-gray-800 hover:text-white">
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
                     <CardTitle className="text-2xl font-bold ml-2">{isEditing ? 'Edit Client' : 'Add New Client'}</CardTitle>
