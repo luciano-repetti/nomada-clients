@@ -19,7 +19,7 @@ export const CompanySearch: React.FC<CompanySearchProps> = ({ searchTerm, setSea
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
             <Input
                 placeholder="Search companies"
-                className="pl-8 bg-gray-800 text-gray-100 border-gray-700"
+                className="pl-8"
                 value={searchTerm}
                 onChange={handleChange}
             />

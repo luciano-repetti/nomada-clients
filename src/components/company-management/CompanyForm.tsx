@@ -1,11 +1,11 @@
 'use client'
 
-import React, { ChangeEvent } from 'react'
+import React, { useState } from 'react'
 import { ChevronLeft } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Company, ModeView } from './types'
+import { InputChip } from '../ui/inputChip'
 
 interface CompanyFormProps {
     isEditing: boolean
@@ -13,62 +13,129 @@ interface CompanyFormProps {
     setView: React.Dispatch<React.SetStateAction<ModeView>>
 }
 
+interface FormState {
+    name: string;
+    emails: string[];
+    phones: string[];
+    address: string;
+    website: string;
+}
+
 export const CompanyForm: React.FC<CompanyFormProps> = ({ isEditing, selectedCompany, setView }) => {
-    const initialData: Partial<Company> = isEditing && selectedCompany ? {
-        name: selectedCompany.name,
-        email: selectedCompany.email,
-        phone: selectedCompany.phone,
-        address: selectedCompany.address,
-        website: selectedCompany.website,
-    } : {
-        name: '',
-        email: '',
-        phone: '',
-        address: '',
-        website: '',
+    const [formData, setFormData] = useState<FormState>(() => {
+        if (isEditing && selectedCompany) {
+            return {
+                name: selectedCompany.name,
+                emails: selectedCompany.emails || [],
+                phones: selectedCompany.phones || [],
+                address: selectedCompany.address,
+                website: selectedCompany.website,
+            }
+        }
+        return {
+            name: '',
+            emails: [],
+            phones: [],
+            address: '',
+            website: '',
+        }
+    })
+
+    const handleChange = (field: keyof FormState, value: string | string[]) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: value,
+        }))
     }
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log(e);
+    const handleSubmit = () => {
+        const companyData: Partial<Company> = {
+            name: formData.name,
+            emails: formData.emails,
+            phones: formData.phones,
+            address: formData.address,
+            website: formData.website,
+        }
+        console.log(companyData)
+    }
+
+    const renderChipField = (field: 'emails' | 'phones') => {
+        const label = field === 'emails' ? 'Email' : 'Phone'
+        return (
+            <div className="space-y-2">
+                <label className="block text-sm text-gray-300">
+                    {label}s
+                </label>
+                <InputChip
+                    values={formData[field]}
+                    onChange={(values) => handleChange(field, values)}
+                    placeholder={`Type ${label.toLowerCase()} and press Enter`}
+                />
+            </div>
+        )
     }
 
     return (
-        <Card className="w-full bg-gray-900 text-gray-100">
-            <CardHeader>
+        <div className="w-full bg-[#12151A] text-gray-100 p-6 rounded-lg">
+            <div className="mb-6">
                 <div className="flex items-center">
-                    <Button variant="ghost" size="icon" onClick={() => setView('list')} className="text-gray-300 hover:bg-gray-800 hover:text-white">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setView('list')}
+                        className="text-gray-300 hover:bg-gray-800 hover:text-white"
+                    >
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
-                    <CardTitle className="text-2xl font-bold ml-2">{isEditing ? 'Edit Company' : 'Add New Company'}</CardTitle>
+                    <h2 className="text-xl font-semibold ml-2">
+                        {isEditing ? 'Edit Company' : 'Add New Company'}
+                    </h2>
                 </div>
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div className="space-y-4">
                 <form className="space-y-4">
-                    {Object.entries(initialData).map(([key, value]) => {
-                        if (key !== 'id' && key !== 'createdAt') {
-                            return (
-                                <div key={key}>
-                                    <label htmlFor={key} className="block text-sm font-medium mb-1 text-gray-300">
-                                        {key.charAt(0).toUpperCase() + key.slice(1)}
-                                    </label>
-                                    <Input
-                                        id={key}
-                                        defaultValue={value}
-                                        className="bg-gray-800 text-gray-100 border-gray-700"
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                            )
-                        }
-                        return null
-                    })}
+                    <div>
+                        <label className="block text-sm text-gray-300 mb-2">
+                            Name
+                        </label>
+                        <Input
+                            value={formData.name}
+                            onChange={(e) => handleChange('name', e.target.value)}
+                        />
+                    </div>
+
+                    {renderChipField('emails')}
+                    {renderChipField('phones')}
+
+                    <div>
+                        <label className="block text-sm text-gray-300 mb-2">
+                            Address
+                        </label>
+                        <Input
+                            value={formData.address}
+                            onChange={(e) => handleChange('address', e.target.value)}
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm text-gray-300 mb-2">
+                            Website
+                        </label>
+                        <Input
+                            value={formData.website}
+                            onChange={(e) => handleChange('website', e.target.value)}
+                        />
+                    </div>
                 </form>
-            </CardContent>
-            <CardFooter>
-                <Button className="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700">
-                    {isEditing ? 'Update Client' : 'Add Client'}
+            </div>
+            <div className="mt-6">
+                <Button
+                    onClick={handleSubmit}
+                    className="w-full h-10 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
+                >
+                    {isEditing ? 'Update Company' : 'Add Company'}
                 </Button>
-            </CardFooter>
-        </Card>
+            </div>
+        </div>
     )
 }

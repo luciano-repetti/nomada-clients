@@ -1,8 +1,8 @@
 export interface Company {
     id: number
     name: string
-    email: string
-    phone: string
+    emails: string[]
+    phones: string[]
     address: string
     created_at: string
     website: string
