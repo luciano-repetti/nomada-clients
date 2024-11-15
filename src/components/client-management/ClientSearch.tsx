@@ -19,7 +19,7 @@ export const ClientSearch: React.FC<ClientSearchProps> = ({ searchTerm, setSearc
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
             <Input
                 placeholder="Search clients"
-                className="pl-8 bg-gray-800 text-gray-100 border-gray-700"
+                className="pl-8"
                 value={searchTerm}
                 onChange={handleChange}
             />

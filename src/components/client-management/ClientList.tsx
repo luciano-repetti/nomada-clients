@@ -4,7 +4,6 @@ import React from 'react'
 import { Eye, Plus, MoreHorizontal } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ClientSearch } from './ClientSearch'
 import { Client, ModeView } from './types'
 import { formatDate } from '@/utils/formatDate'
@@ -56,11 +55,11 @@ export const ClientList: React.FC<ClientListProps> = ({
     // Si no hay clientes, mostramos un mensaje
     if (!clients || clients.length === 0) {
         return (
-            <Card className="w-full bg-gray-900 text-gray-100">
-                <CardHeader>
-                    <CardTitle className="text-2xl font-bold">Client Management</CardTitle>
-                </CardHeader>
-                <CardContent>
+            <div className="w-full bg-[#12151A] text-gray-100 p-6 rounded-lg">
+                <div className="mb-6">
+                    <h2 className="text-xl font-semibold">Client Management</h2>
+                </div>
+                <div className="space-y-4">
                     <div className="flex justify-between mb-4">
                         <ClientSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                         <Button
@@ -73,17 +72,17 @@ export const ClientList: React.FC<ClientListProps> = ({
                     <div className="text-center py-8 text-gray-400">
                         No clients found
                     </div>
-                </CardContent>
-            </Card>
+                </div>
+            </div>
         )
     }
 
     return (
-        <Card className="w-full bg-gray-900 text-gray-100">
-            <CardHeader>
-                <CardTitle className="text-2xl font-bold">Client Management</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <div className="w-full bg-[#12151A] text-gray-100 p-6 rounded-lg">
+            <div className="mb-6">
+                <h2 className="text-xl font-semibold">Client Management</h2>
+            </div>
+            <div className="space-y-4">
                 <div className="flex justify-between mb-4">
                     <ClientSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                     <Button
@@ -141,7 +140,7 @@ export const ClientList: React.FC<ClientListProps> = ({
                         </TableBody>
                     </Table>
                 </div>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     )
 }

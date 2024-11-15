@@ -83,7 +83,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ isEditing, selectedCom
                         variant="ghost"
                         size="icon"
                         onClick={() => setView('list')}
-                        className="text-gray-300 hover:bg-gray-800 hover:text-white"
+                        className="text-gray-300 hover:bg-zinc-800 hover:text-white"
                     >
                         <ChevronLeft className="h-4 w-4" />
                     </Button>

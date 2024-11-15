@@ -34,7 +34,7 @@ export const CompanyDetail: React.FC<CompanyDetailProps> = ({ selectedCompany, s
                         variant="ghost"
                         size="icon"
                         onClick={() => setView('list')}
-                        className="text-gray-300 hover:text-white hover:bg-transparent"
+                        className="text-gray-300 hover:text-white hover:bg-zinc-800"
                     >
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
