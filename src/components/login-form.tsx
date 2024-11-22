@@ -38,8 +38,8 @@ export function LoginFormComponent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black p-4">
-      <div className="w-full max-w-md space-y-8 bg-gray-900 p-8 rounded-xl shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-gray-950 p-4">
+      <div className="w-full max-w-md space-y-8 bg-[#12151A] p-8 rounded-xl shadow-2xl">
         <div className="flex flex-col items-center">
           <svg className="w-20 h-20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M20 80L50 20L80 80L50 60L20 80Z" fill="url(#logo-gradient)" />
@@ -58,13 +58,11 @@ export function LoginFormComponent() {
           <div className="space-y-1">
             <Label htmlFor="email" className="text-white">Email or Username</Label>
             <Input
-              id="email"
               name="email"
               type="text"
+              placeholder="Enter your email or username"
               value={formData.email}
               onChange={handleInputChange}
-              placeholder="Enter your email or username"
-              className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-1">
@@ -74,10 +72,9 @@ export function LoginFormComponent() {
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
                 value={formData.password}
                 onChange={handleInputChange}
-                placeholder="Enter your password"
-                className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               />
               <Button
                 type="button"
