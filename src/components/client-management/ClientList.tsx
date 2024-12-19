@@ -5,26 +5,22 @@ import { Eye, Plus, MoreHorizontal } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ClientSearch } from './ClientSearch'
-import { Client, ModeView } from './types'
+import { Client } from './types'
 import { formatDate } from '@/utils/formatDate'
+import Link from 'next/link'
 
 interface ClientListProps {
     clients: Client[]
-    setView: React.Dispatch<React.SetStateAction<ModeView>>
-    setSelectedClient: (client: Client) => void
     searchTerm: string
     setSearchTerm: React.Dispatch<React.SetStateAction<string>>
 }
 
 export const ClientList: React.FC<ClientListProps> = ({
-    clients = [], // Valor por defecto para evitar undefined
-    setView,
-    setSelectedClient,
+    clients = [],
     searchTerm,
     setSearchTerm
 }) => {
     const renderMultipleValues = (values: string[] | undefined) => {
-        // Si values es undefined o no es un array, retornamos un array vacío
         if (!values || !Array.isArray(values)) return null;
 
         const MAX_VISIBLE = 3;
@@ -52,31 +48,6 @@ export const ClientList: React.FC<ClientListProps> = ({
         )
     }
 
-    // Si no hay clientes, mostramos un mensaje
-    if (!clients || clients.length === 0) {
-        return (
-            <div className="w-full bg-[#12151A] text-gray-100 p-6 rounded-lg">
-                <div className="mb-6">
-                    <h2 className="text-xl font-semibold">Client Management</h2>
-                </div>
-                <div className="space-y-4">
-                    <div className="flex justify-between mb-4">
-                        <ClientSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-                        <Button
-                            onClick={() => setView('add')}
-                            className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
-                        >
-                            <Plus className="mr-2 h-4 w-4" /> Add Client
-                        </Button>
-                    </div>
-                    <div className="text-center py-8 text-gray-400">
-                        No clients found
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
     return (
         <div className="w-full bg-[#12151A] text-gray-100 p-6 rounded-lg">
             <div className="mb-6">
@@ -85,12 +56,13 @@ export const ClientList: React.FC<ClientListProps> = ({
             <div className="space-y-4">
                 <div className="flex justify-between mb-4">
                     <ClientSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-                    <Button
-                        onClick={() => setView('add')}
-                        className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
-                    >
-                        <Plus className="mr-2 h-4 w-4" /> Add Client
-                    </Button>
+                    <Link href="/clients/new">
+                        <Button
+                            className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
+                        >
+                            <Plus className="mr-2 h-4 w-4" /> Add Client
+                        </Button>
+                    </Link>
                 </div>
                 <div className="overflow-x-auto">
                     <Table>
@@ -123,17 +95,15 @@ export const ClientList: React.FC<ClientListProps> = ({
                                         {formatDate(client.created_at)}
                                     </TableCell>
                                     <TableCell className="text-right align-top py-3">
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => {
-                                                setSelectedClient(client);
-                                                setView('detail');
-                                            }}
-                                            className="text-gray-400 hover:text-slate-950"
-                                        >
-                                            <Eye className="h-4 w-4" />
-                                        </Button>
+                                        <Link href={`/clients/${client.id}`}>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="text-gray-400 hover:text-slate-950"
+                                            >
+                                                <Eye className="h-4 w-4" />
+                                            </Button>
+                                        </Link>
                                     </TableCell>
                                 </TableRow>
                             ))}

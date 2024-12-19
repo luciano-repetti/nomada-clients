@@ -4,13 +4,13 @@ import React, { useState } from 'react'
 import { ChevronLeft } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Client, ModeView } from './types'
+import { Client } from './types'
 import { InputChip } from '../ui/inputChip'
+import { useParams, useRouter } from 'next/navigation'
 
 interface ClientFormProps {
     isEditing: boolean
     selectedClient?: Client
-    setView: React.Dispatch<React.SetStateAction<ModeView>>
 }
 
 interface FormState {
@@ -20,13 +20,16 @@ interface FormState {
     address: string;
 }
 
-export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClient, setView }) => {
+export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClient }) => {
+    const router = useRouter()
+    const params = useParams()
+
     const [formData, setFormData] = useState<FormState>(() => {
         if (isEditing && selectedClient) {
             return {
                 name: selectedClient.name,
-                emails: selectedClient.emails || [], // Ya no necesitamos split
-                phones: selectedClient.phones || [], // Ya no necesitamos split
+                emails: selectedClient.emails || [],
+                phones: selectedClient.phones || [],
                 address: selectedClient.address,
             }
         }
@@ -38,6 +41,14 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
         }
     })
 
+    const handleBack = () => {
+        if (isEditing) {
+            router.push(`/clients/${params.id}`)
+        } else {
+            router.push('/clients')
+        }
+    }
+
     const handleChange = (field: keyof FormState, value: string | string[]) => {
         setFormData(prev => ({
             ...prev,
@@ -48,8 +59,8 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
     const handleSubmit = () => {
         const clientData: Partial<Client> = {
             name: formData.name,
-            emails: formData.emails, // Ya no necesitamos join
-            phones: formData.phones, // Ya no necesitamos join
+            emails: formData.emails,
+            phones: formData.phones,
             address: formData.address,
         }
         console.log(clientData)
@@ -78,8 +89,8 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
                     <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => setView('list')}
-                        className="text-gray-300 hover:text-white hover:bg-zinc-800"
+                        onClick={handleBack}
+                        className="text-gray-300 hover:bg-zinc-800 hover:text-white"
                     >
                         <ChevronLeft className="h-4 w-4" />
                     </Button>

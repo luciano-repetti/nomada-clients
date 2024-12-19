@@ -4,13 +4,13 @@ import React, { useState } from 'react'
 import { ChevronLeft } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Company, ModeView } from './types'
+import { Company } from './types'
 import { InputChip } from '../ui/inputChip'
+import { useParams, useRouter } from 'next/navigation'
 
 interface CompanyFormProps {
     isEditing: boolean
     selectedCompany?: Company
-    setView: React.Dispatch<React.SetStateAction<ModeView>>
 }
 
 interface FormState {
@@ -21,7 +21,10 @@ interface FormState {
     website: string;
 }
 
-export const CompanyForm: React.FC<CompanyFormProps> = ({ isEditing, selectedCompany, setView }) => {
+export const CompanyForm: React.FC<CompanyFormProps> = ({ isEditing, selectedCompany }) => {
+    const router = useRouter()
+    const params = useParams()
+
     const [formData, setFormData] = useState<FormState>(() => {
         if (isEditing && selectedCompany) {
             return {
@@ -40,6 +43,14 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ isEditing, selectedCom
             website: '',
         }
     })
+
+    const handleBack = () => {
+        if (isEditing) {
+            router.push(`/companies/${params.id}`)
+        } else {
+            router.push('/companies')
+        }
+    }
 
     const handleChange = (field: keyof FormState, value: string | string[]) => {
         setFormData(prev => ({
@@ -82,7 +93,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ isEditing, selectedCom
                     <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => setView('list')}
+                        onClick={handleBack}
                         className="text-gray-300 hover:bg-zinc-800 hover:text-white"
                     >
                         <ChevronLeft className="h-4 w-4" />

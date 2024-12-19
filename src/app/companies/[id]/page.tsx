@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { CompanyList } from '@/components/company-management/CompanyList'
+import React from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import { CompanyDetail } from '@/components/company-management/CompanyDetail'
 import { Company } from '@/components/company-management/types'
 
 const dummyCompanies: Company[] = [
@@ -51,27 +52,29 @@ const dummyCompanies: Company[] = [
         website: 'https://www.logisticaglobal.com'
     }
 ]
-export default function CompaniesPage() {
-    const [companies, setCompanies] = useState<Company[]>(dummyCompanies)
-    const [searchTerm, setSearchTerm] = useState<string>('')
 
-    useEffect(() => {
-        const filteredCompanies = dummyCompanies.filter(company =>
-            company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            company.emails.some(email => email.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            company.phones.some(phone => phone.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            company.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            company.website.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        setCompanies(filteredCompanies)
-    }, [searchTerm])
+export default function CompanyDetailPage() {
+    const params = useParams()
+    const router = useRouter()
+
+    const companyId = Number(params.id)
+    const selectedCompany = dummyCompanies.find(company => company.id === companyId)
+
+    if (!selectedCompany) {
+        return <div>Compañía no encontrada</div>
+    }
 
     return (
         <div className="min-h-screen bg-gray-950 text-gray-100 p-8">
-            <CompanyList
-                companies={companies}
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
+            <CompanyDetail
+                selectedCompany={selectedCompany}
+                setView={(view) => {
+                    if (view === 'list') {
+                        router.push('/companies')
+                    } else if (view === 'edit') {
+                        router.push(`/companies/${companyId}/edit`)
+                    }
+                }}
             />
         </div>
     )

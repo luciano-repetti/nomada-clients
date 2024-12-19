@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { ClientList } from '@/components/client-management/ClientList'
+import React from 'react'
+import { useParams } from 'next/navigation'
+import { ClientForm } from '@/components/client-management/ClientForm'
 import { Client } from '@/components/client-management/types'
 
 const dummyClients: Client[] = [
@@ -39,26 +40,22 @@ const dummyClients: Client[] = [
     },
 ]
 
-export default function ClientsPage() {
-    const [clients, setClients] = useState<Client[]>(dummyClients)
-    const [searchTerm, setSearchTerm] = useState<string>('')
 
-    useEffect(() => {
-        const filteredClients = dummyClients.filter(client =>
-            client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            client.emails.some(email => email.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            client.phones.some(phone => phone.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            client.address.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        setClients(filteredClients)
-    }, [searchTerm])
+export default function EditClientPage() {
+    const params = useParams()
+
+    const clientId = Number(params.id)
+    const selectedClient = dummyClients.find(client => client.id === clientId)
+
+    if (!selectedClient) {
+        return <div>Cliente no encontrado</div>
+    }
 
     return (
         <div className="min-h-screen bg-gray-950 text-gray-100 p-8">
-            <ClientList
-                clients={clients}
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
+            <ClientForm
+                isEditing={true}
+                selectedClient={selectedClient}
             />
         </div>
     )
