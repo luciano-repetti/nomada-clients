@@ -25,6 +25,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ isEditing, selectedCom
     const router = useRouter()
     const params = useParams()
 
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState<FormState>(() => {
         if (isEditing && selectedCompany) {
             return {
@@ -59,16 +60,51 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ isEditing, selectedCom
         }))
     }
 
-    const handleSubmit = () => {
-        const companyData: Partial<Company> = {
-            name: formData.name,
-            emails: formData.emails,
-            phones: formData.phones,
-            address: formData.address,
-            website: formData.website,
+    const handleSubmit = async () => {
+        try {
+            setIsLoading(true);
+            const token = localStorage.getItem('token_dashboard_nomada');
+
+            if (!token) {
+                router.push('/login');
+                return;
+            }
+
+            const companyData: Partial<Company> = {
+                name: formData.name,
+                emails: formData.emails,
+                phones: formData.phones,
+                address: formData.address,
+                website: formData.website,
+            };
+
+            const response = await fetch('/api/companies', {
+                method: isEditing ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    ...companyData,
+                    ...(isEditing && { id: params.id })
+                })
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || 'Error al guardar la compañía');
+            }
+
+            router.push('/companies');
+            router.refresh();
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert(error instanceof Error ? error.message : 'Error al guardar la compañía');
+        } finally {
+            setIsLoading(false);
         }
-        console.log(companyData)
-    }
+    };
 
     const renderChipField = (field: 'emails' | 'phones') => {
         const label = field === 'emails' ? 'Email' : 'Phone'
@@ -144,7 +180,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ isEditing, selectedCom
                     onClick={handleSubmit}
                     className="w-full h-10 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
                 >
-                    {isEditing ? 'Update Company' : 'Add Company'}
+                    {isEditing ? isLoading ? 'Updating Company...' : 'Update Company' : isLoading ? 'adding Company...' : 'Add Company'}
                 </Button>
             </div>
         </div>

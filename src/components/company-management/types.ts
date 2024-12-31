@@ -1,11 +1,14 @@
 export interface Company {
-    id: number
+    _id: string;
+    id: string
     name: string
     emails: string[]
     phones: string[]
     address: string
-    created_at: string
     website: string
+    createdAt: string;
+    updatedAt: string;
+    __v?: number;
 }
 
 export type ModeView = 'list' | 'detail' | 'add' | 'edit';
