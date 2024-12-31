@@ -127,7 +127,7 @@ export function LoginFormComponent() {
             className="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
             disabled={isLoading}
           >
-            {isLoading ? "Iniciando sesión..." : "Log in"}
+            {isLoading ? "Loading..." : "Log in"}
           </Button>
         </form>
         <div className="text-center mt-4">

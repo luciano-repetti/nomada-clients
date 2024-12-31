@@ -24,6 +24,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
     const router = useRouter()
     const params = useParams()
 
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState<FormState>(() => {
         if (isEditing && selectedClient) {
             return {
@@ -56,15 +57,55 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
         }))
     }
 
-    const handleSubmit = () => {
-        const clientData: Partial<Client> = {
-            name: formData.name,
-            emails: formData.emails,
-            phones: formData.phones,
-            address: formData.address,
+    const handleSubmit = async () => {
+        try {
+            setIsLoading(true);
+            const token = localStorage.getItem('token_dashboard_nomada');
+
+            if (!token) {
+                router.push('/');
+                return;
+            }
+
+            const clientData: Partial<Client> = {
+                name: formData.name,
+                emails: formData.emails,
+                phones: formData.phones,
+                address: formData.address,
+            };
+
+            const response = await fetch('/api/clients', {
+                method: isEditing ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    ...clientData,
+                    ...(isEditing && { id: params.id })
+                })
+            });
+
+            if (!response.ok) {
+                const text = await response.text();
+                console.error('Error response:', text);
+                throw new Error('Error al guardar el cliente');
+            }
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Error al guardar el cliente');
+            }
+
+            router.push('/clients');
+        } catch (error) {
+            alert(error instanceof Error ? error.message : 'Error al guardar el cliente');
+        } finally {
+            setIsLoading(false);
         }
-        console.log(clientData)
-    }
+    };
+
 
     const renderChipField = (field: 'emails' | 'phones') => {
         const label = field === 'emails' ? 'Email' : 'Phone'
@@ -126,9 +167,10 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
             <div className="mt-6">
                 <Button
                     onClick={handleSubmit}
+                    disabled={isLoading}
                     className="w-full h-10 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white rounded-md"
                 >
-                    {isEditing ? 'Update Client' : 'Add Client'}
+                    {isEditing ? isLoading ? 'Updating client...' : 'Update Client' : isLoading ? 'adding client...' : 'Add Client'}
                 </Button>
             </div>
         </div>
