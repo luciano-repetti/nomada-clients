@@ -78,7 +78,7 @@ export const ClientList: React.FC<ClientListProps> = ({
                         </TableHeader>
                         <TableBody>
                             {clients.map((client) => (
-                                <TableRow key={client.id} className="border-b border-gray-800">
+                                <TableRow key={client._id} className="border-b border-gray-800">
                                     <TableCell className="font-medium align-top py-3">
                                         {client.name}
                                     </TableCell>
@@ -95,7 +95,7 @@ export const ClientList: React.FC<ClientListProps> = ({
                                         {formatDate(client.created_at)}
                                     </TableCell>
                                     <TableCell className="text-right align-top py-3">
-                                        <Link href={`/clients/${client.id}`}>
+                                        <Link href={`/clients/${client._id}`}>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"

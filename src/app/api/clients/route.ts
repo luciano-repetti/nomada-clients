@@ -132,3 +132,23 @@ export async function PUT(request: Request) {
         );
     }
 }
+
+export async function GET() {
+    try {
+        // Conectar a la base de datos
+        await dbConnect();
+
+        // Obtener todos los clientes
+        const clients = await Client.find({})
+            .sort({ createdAt: -1 });
+
+        return NextResponse.json(clients);
+
+    } catch (error) {
+        console.error('Error:', error);
+        return NextResponse.json(
+            { message: 'Error al obtener los clientes' },
+            { status: 500 }
+        );
+    }
+}
