@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 export function LoginFormComponent() {
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [formData, setFormData] = useState({
     email: "",
@@ -28,14 +29,42 @@ export function LoginFormComponent() {
     }));
   };
 
-  const handleForm = (event: FormEvent) => {
+  const handleForm = async (event: FormEvent) => {
     event.preventDefault();
-    if (formData.email === "admin" && formData.password === "Admin123*") {
-      router.push('/clients');
-    } else {
-      alert("Invalid credentials. Please try again.");
+
+    try {
+      setIsLoading(true)
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Error en el login');
+      }
+
+      // Si el login es exitoso
+      if (data.token) {
+        // Guardamos el token en localStorage
+        localStorage.setItem('token_dashboard_nomada', data.token);
+        // Redirigimos a la página de clientes
+        router.push('/clients');
+      }
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Error en el login');
+    } finally {
+      setIsLoading(false)
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-950 p-4">
@@ -96,8 +125,9 @@ export function LoginFormComponent() {
           </div>
           <Button
             className="w-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+            disabled={isLoading}
           >
-            Log in
+            {isLoading ? "Iniciando sesión..." : "Log in"}
           </Button>
         </form>
         <div className="text-center mt-4">
