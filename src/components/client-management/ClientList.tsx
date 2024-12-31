@@ -5,12 +5,12 @@ import { Eye, Plus, MoreHorizontal } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ClientSearch } from './ClientSearch'
-import { Client } from './types'
 import { formatDate } from '@/utils/formatDate'
 import Link from 'next/link'
+import { FormattedClient } from '@/utils/formatClient'
 
 interface ClientListProps {
-    clients: Client[]
+    clients: FormattedClient[]
     searchTerm: string
     setSearchTerm: React.Dispatch<React.SetStateAction<string>>
 }
@@ -20,10 +20,11 @@ export const ClientList: React.FC<ClientListProps> = ({
     searchTerm,
     setSearchTerm
 }) => {
+
     const renderMultipleValues = (values: string[] | undefined) => {
         if (!values || !Array.isArray(values)) return null;
 
-        const MAX_VISIBLE = 3;
+        const MAX_VISIBLE = 1;
         const visibleValues = values.slice(0, MAX_VISIBLE);
         const remainingCount = values.length - MAX_VISIBLE;
 
@@ -73,12 +74,13 @@ export const ClientList: React.FC<ClientListProps> = ({
                                 <TableHead className="text-gray-300">Phone</TableHead>
                                 <TableHead className="text-gray-300">Address</TableHead>
                                 <TableHead className="text-gray-300">Created At</TableHead>
+                                <TableHead className="text-gray-300">Updated At</TableHead>
                                 <TableHead className="text-gray-300 text-right">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {clients.map((client) => (
-                                <TableRow key={client._id} className="border-b border-gray-800">
+                                <TableRow key={client.id} className="border-b border-gray-800">
                                     <TableCell className="font-medium align-top py-3">
                                         {client.name}
                                     </TableCell>
@@ -92,10 +94,13 @@ export const ClientList: React.FC<ClientListProps> = ({
                                         {client.address}
                                     </TableCell>
                                     <TableCell className="align-top py-3">
-                                        {formatDate(client.created_at)}
+                                        {formatDate(client.createdAt)}
+                                    </TableCell>
+                                    <TableCell className="align-top py-3">
+                                        {formatDate(client.updatedAt)}
                                     </TableCell>
                                     <TableCell className="text-right align-top py-3">
-                                        <Link href={`/clients/${client._id}`}>
+                                        <Link href={`/clients/${client.id}`}>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"

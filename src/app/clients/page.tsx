@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { ClientList } from '@/components/client-management/ClientList'
-import { Client } from '@/components/client-management/types'
 import { useRouter } from 'next/navigation'
+import { formatClients, FormattedClient } from '@/utils/formatClient'
 
 export default function ClientsPage() {
     const router = useRouter();
-    const [clients, setClients] = useState<Client[]>([])
+    const [clients, setClients] = useState<FormattedClient[]>([])
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [isLoading, setIsLoading] = useState(true)
 
@@ -30,8 +30,10 @@ export default function ClientsPage() {
                     throw new Error('Error al obtener los clientes');
                 }
 
+
                 const data = await response.json();
-                setClients(data);
+
+                setClients(formatClients(data));
             } catch (error) {
                 console.error('Error:', error);
                 alert('Error al cargar los clientes');

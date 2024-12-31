@@ -33,6 +33,7 @@ export default function ClientDetailPage() {
                 }
 
                 const data = await response.json();
+
                 setClient(data);
                 setError(null);
             } catch (error) {

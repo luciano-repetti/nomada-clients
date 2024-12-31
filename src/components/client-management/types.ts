@@ -1,10 +1,13 @@
 export interface Client {
+    id: number;
     _id: number;
     name: string;
     emails: string[];
     phones: string[];
     address: string;
-    created_at: string;
+    createdAt: string;
+    updatedAt: string;
+    __v?: number;
 }
 
 export type ModeView = 'list' | 'detail' | 'add' | 'edit';

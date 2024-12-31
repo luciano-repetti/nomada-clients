@@ -4,8 +4,8 @@ import React from 'react'
 import { ChevronLeft, Edit, Trash2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Client, ModeView } from './types'
-import formatClientData from '@/utils/formatClient'
 import { formatDate } from '@/utils/formatDate'
+import { formatClientData } from '@/utils/formatClient'
 
 interface ClientDetailProps {
     selectedClient: Client;
@@ -14,7 +14,8 @@ interface ClientDetailProps {
 
 export const ClientDetail: React.FC<ClientDetailProps> = ({ selectedClient, setView }) => {
     const formattedClient = formatClientData(selectedClient);
-    formattedClient.created_at = formatDate(formattedClient.created_at)
+    formattedClient.createdAt = formatDate(formattedClient.createdAt)
+    formattedClient.updatedAt = formatDate(formattedClient.updatedAt)
 
     return (
         <div className="w-full bg-[#12151A] text-gray-100 p-6 rounded-lg">
