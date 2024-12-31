@@ -120,3 +120,21 @@ export async function PUT(request: Request) {
         );
     }
 }
+
+export async function GET() {
+    try {
+        await dbConnect();
+
+        const companies = await Company.find({})
+            .sort({ createdAt: -1 });
+
+        return NextResponse.json(companies);
+
+    } catch (error) {
+        console.error('Error:', error);
+        return NextResponse.json(
+            { message: 'Error al obtener las compañías' },
+            { status: 500 }
+        );
+    }
+}

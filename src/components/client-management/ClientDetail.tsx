@@ -57,7 +57,6 @@ export const ClientDetail: React.FC<ClientDetailProps> = ({ selectedClient, setV
         }
     };
 
-
     return (
         <div className="w-full bg-[#12151A] text-gray-100 p-6 rounded-lg">
             <div className="mb-6">
@@ -108,7 +107,7 @@ export const ClientDetail: React.FC<ClientDetailProps> = ({ selectedClient, setV
                     onClick={() => setShowDialog(true)}
                 >
                     <Trash2 className="mr-2 h-4 w-4" />
-                    {isDeleting ? 'eliminating...' : 'Delete'}
+                    {isDeleting ? 'Eliminating...' : 'Delete'}
                 </Button>
             </div>
             <ConfirmationDialog

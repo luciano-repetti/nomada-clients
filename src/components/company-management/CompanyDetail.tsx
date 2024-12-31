@@ -1,14 +1,13 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { ChevronLeft, Edit, Trash2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Company, ModeView } from './types'
-
-type CompanyWithStringArrays = Omit<Company, 'emails' | 'phones'> & {
-    emails: string[] | string;
-    phones: string[] | string;
-}
+import { useRouter } from 'next/navigation'
+import { ConfirmationDialog } from '../ui/confirmation-dialog'
+import formatCompanyData from '@/utils/formatCompany'
+import { formatDate } from '@/lib/utils'
 
 interface CompanyDetailProps {
     selectedCompany: Company;
@@ -16,15 +15,49 @@ interface CompanyDetailProps {
 }
 
 export const CompanyDetail: React.FC<CompanyDetailProps> = ({ selectedCompany, setView }) => {
-    const formatCompanyData = (company: Company): CompanyWithStringArrays => {
-        return {
-            ...company,
-            emails: Array.isArray(company.emails) ? company.emails.join(", ") : company.emails,
-            phones: Array.isArray(company.phones) ? company.phones.join(", ") : company.phones,
-        }
-    }
+    const router = useRouter();
+    const [showDialog, setShowDialog] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const formattedCompany = formatCompanyData(selectedCompany);
+    formattedCompany.createdAt = formatDate(formattedCompany.createdAt)
+    formattedCompany.updatedAt = formatDate(formattedCompany.updatedAt)
+
+    console.log(formattedCompany)
+
+    const handleDelete = async () => {
+        try {
+            setIsDeleting(true);
+            const token = localStorage.getItem('token_dashboard_nomada');
+
+            if (!token) {
+                router.push('/login');
+                return;
+            }
+
+            const response = await fetch(`/api/companies/${formattedCompany.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || 'Error al eliminar la compañía');
+            }
+
+            setShowDialog(false);
+            router.push('/companies');
+            router.refresh();
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert(error instanceof Error ? error.message : 'Error al eliminar la compañía');
+        } finally {
+            setIsDeleting(false);
+        }
+    };
 
     return (
         <div className="w-full bg-[#12151A] text-gray-100 p-6 rounded-lg">
@@ -70,10 +103,19 @@ export const CompanyDetail: React.FC<CompanyDetailProps> = ({ selectedCompany, s
                 <Button
                     variant="destructive"
                     className="bg-red-600 hover:bg-red-700"
+                    onClick={() => setShowDialog(true)}
                 >
-                    <Trash2 className="mr-2 h-4 w-4" /> Delete
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    {isDeleting ? 'Eliminating...' : 'Delete'}
                 </Button>
             </div>
+            <ConfirmationDialog
+                isOpen={showDialog}
+                onClose={() => setShowDialog(false)}
+                onConfirm={handleDelete}
+                title="¿Está seguro que desea eliminar?"
+                description="Esta acción eliminará permanentemente la compañía y no se puede deshacer."
+            />
         </div>
     )
 }

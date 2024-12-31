@@ -5,12 +5,12 @@ import { Eye, Plus, MoreHorizontal } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { CompanySearch } from './CompanySearch'
-import { Company } from './types'
 import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
+import { FormattedCompany } from '@/utils/formatCompany'
 
 interface CompanyListProps {
-    companies: Company[]
+    companies: FormattedCompany[]
     searchTerm: string
     setSearchTerm: React.Dispatch<React.SetStateAction<string>>
 }
@@ -23,7 +23,7 @@ export const CompanyList: React.FC<CompanyListProps> = ({
     const renderMultipleValues = (values: string[] | undefined) => {
         if (!values || !Array.isArray(values)) return null;
 
-        const MAX_VISIBLE = 3;
+        const MAX_VISIBLE = 1;
         const visibleValues = values.slice(0, MAX_VISIBLE);
         const remainingCount = values.length - MAX_VISIBLE;
 
@@ -73,6 +73,7 @@ export const CompanyList: React.FC<CompanyListProps> = ({
                             <TableHead className="text-gray-300">Address</TableHead>
                             <TableHead className="text-gray-300">Website</TableHead>
                             <TableHead className="text-gray-300">Created At</TableHead>
+                            <TableHead className="text-gray-300">Updated At</TableHead>
                             <TableHead className="text-gray-300 text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -95,7 +96,10 @@ export const CompanyList: React.FC<CompanyListProps> = ({
                                     {company.website}
                                 </TableCell>
                                 <TableCell className="align-top py-3">
-                                    {formatDate(company.created_at)}
+                                    {formatDate(company.createdAt)}
+                                </TableCell>
+                                <TableCell className="align-top py-3">
+                                    {formatDate(company.updatedAt)}
                                 </TableCell>
                                 <TableCell className="text-right align-top py-3">
                                     <Link href={`/companies/${company.id}`}>
