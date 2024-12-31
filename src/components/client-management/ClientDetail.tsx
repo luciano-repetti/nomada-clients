@@ -1,11 +1,13 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { ChevronLeft, Edit, Trash2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Client, ModeView } from './types'
 import { formatDate } from '@/utils/formatDate'
 import { formatClientData } from '@/utils/formatClient'
+import { ConfirmationDialog } from '../ui/confirmation-dialog'
+import { useRouter } from 'next/navigation'
 
 interface ClientDetailProps {
     selectedClient: Client;
@@ -13,9 +15,48 @@ interface ClientDetailProps {
 }
 
 export const ClientDetail: React.FC<ClientDetailProps> = ({ selectedClient, setView }) => {
+    const router = useRouter();
+    const [showDialog, setShowDialog] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
     const formattedClient = formatClientData(selectedClient);
     formattedClient.createdAt = formatDate(formattedClient.createdAt)
     formattedClient.updatedAt = formatDate(formattedClient.updatedAt)
+
+    const handleDelete = async () => {
+        try {
+            setIsDeleting(true);
+            const token = localStorage.getItem('token_dashboard_nomada');
+
+            if (!token) {
+                router.push('/login');
+                return;
+            }
+
+            const response = await fetch(`/api/clients/${formattedClient.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || 'Error al eliminar el cliente');
+            }
+
+            setShowDialog(false);
+            router.push('/clients');
+            router.refresh();
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert(error instanceof Error ? error.message : 'Error al eliminar el cliente');
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
 
     return (
         <div className="w-full bg-[#12151A] text-gray-100 p-6 rounded-lg">
@@ -64,10 +105,19 @@ export const ClientDetail: React.FC<ClientDetailProps> = ({ selectedClient, setV
                 <Button
                     variant="destructive"
                     className="bg-red-600 hover:bg-red-700"
+                    onClick={() => setShowDialog(true)}
                 >
-                    <Trash2 className="mr-2 h-4 w-4" /> Delete
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    {isDeleting ? 'eliminating...' : 'Delete'}
                 </Button>
             </div>
+            <ConfirmationDialog
+                isOpen={showDialog}
+                onClose={() => setShowDialog(false)}
+                onConfirm={handleDelete}
+                title="¿Está seguro que desea eliminar?"
+                description="Esta acción eliminará permanentemente el cliente y no se puede deshacer."
+            />
         </div>
     )
 }

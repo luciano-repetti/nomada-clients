@@ -38,3 +38,28 @@ export async function GET(
         );
     }
 }
+
+export async function DELETE(
+    request: Request,
+    { params }: { params: { id: string } }
+) {
+    try {
+        await dbConnect();
+        const client = await Client.findByIdAndDelete(params.id);
+        
+        if (!client) {
+            return NextResponse.json(
+                { message: 'Cliente no encontrado' },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json({ message: 'Cliente eliminado exitosamente' });
+    } catch (error) {
+        console.error(error)
+        return NextResponse.json(
+            { message: 'Error al eliminar el cliente' },
+            { status: 500 }
+        );
+    }
+}
