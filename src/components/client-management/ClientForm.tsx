@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Client } from './types'
 import { InputChip } from '../ui/inputChip'
 import { useParams, useRouter } from 'next/navigation'
+import { CompanySelect } from '../company-management/CompanySelect'
 
 interface ClientFormProps {
     isEditing: boolean
@@ -18,6 +19,7 @@ interface FormState {
     emails: string[];
     phones: string[];
     address: string;
+    company?: string;
 }
 
 export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClient }) => {
@@ -27,11 +29,16 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState<FormState>(() => {
         if (isEditing && selectedClient) {
+            const companyId = selectedClient.company && typeof selectedClient.company === 'object'
+                ? selectedClient.company._id.toString()
+                : selectedClient.company;
+
             return {
                 name: selectedClient.name,
                 emails: selectedClient.emails || [],
                 phones: selectedClient.phones || [],
                 address: selectedClient.address,
+                company: companyId,
             }
         }
         return {
@@ -39,8 +46,10 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
             emails: [],
             phones: [],
             address: '',
+            company: undefined
         }
-    })
+    });
+
 
     const handleBack = () => {
         if (isEditing) {
@@ -72,6 +81,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
                 emails: formData.emails,
                 phones: formData.phones,
                 address: formData.address,
+                company: formData.company,
             };
 
             const response = await fetch('/api/clients', {
@@ -163,6 +173,16 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
                         onChange={(e) => handleChange('address', e.target.value)}
                     />
                 </div>
+                <CompanySelect
+                    value={formData.company}
+                    onChange={(value) => {
+                        setFormData(prev => ({
+                            ...prev,
+                            company: value
+                        }));
+                    }}
+                    isOptional={true}
+                />
             </div>
             <div className="mt-6">
                 <Button

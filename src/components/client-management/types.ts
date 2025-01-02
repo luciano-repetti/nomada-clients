@@ -1,3 +1,8 @@
+export interface Company {
+    name: string;
+    _id: number;
+}
+
 export interface Client {
     id: number;
     _id: number;
@@ -5,6 +10,7 @@ export interface Client {
     emails: string[];
     phones: string[];
     address: string;
+    company?: string | Company
     createdAt: string;
     updatedAt: string;
     __v?: number;

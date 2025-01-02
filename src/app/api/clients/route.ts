@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
         // Obtener datos del body
         const body = await request.json();
-        const { name, emails, phones, address } = body;
+        const { name, emails, phones, address, company } = body;
 
         // Validaciones básicas
         if (!name || !emails.length || !phones.length || !address) {
@@ -61,7 +61,8 @@ export async function POST(request: Request) {
             name,
             emails,
             phones,
-            address
+            address,
+            company
         });
 
         return NextResponse.json(client, { status: 201 });
@@ -85,7 +86,7 @@ export async function PUT(request: Request) {
 
         // Obtener datos del body
         const body = await request.json();
-        const { id, name, emails, phones, address } = body;
+        const { id, name, emails, phones, address, company } = body;
 
         // Validar ID
         if (!id || !isValidObjectId(id)) {
@@ -110,7 +111,8 @@ export async function PUT(request: Request) {
                 name,
                 emails,
                 phones,
-                address
+                address,
+                company: company ? company : null
             },
             { new: true }
         );

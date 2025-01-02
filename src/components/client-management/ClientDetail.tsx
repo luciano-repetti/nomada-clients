@@ -4,8 +4,7 @@ import React, { useState } from 'react'
 import { ChevronLeft, Edit, Trash2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Client, ModeView } from './types'
-import { formatDate } from '@/utils/formatDate'
-import { formatClientData } from '@/utils/formatClient'
+import { formatClientDetails } from '@/utils/formatClient'
 import { ConfirmationDialog } from '../ui/confirmation-dialog'
 import { useRouter } from 'next/navigation'
 
@@ -19,9 +18,7 @@ export const ClientDetail: React.FC<ClientDetailProps> = ({ selectedClient, setV
     const [showDialog, setShowDialog] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const formattedClient = formatClientData(selectedClient);
-    formattedClient.createdAt = formatDate(formattedClient.createdAt)
-    formattedClient.updatedAt = formatDate(formattedClient.updatedAt)
+    const formattedClient = formatClientDetails(selectedClient);
 
     const handleDelete = async () => {
         try {
@@ -77,7 +74,7 @@ export const ClientDetail: React.FC<ClientDetailProps> = ({ selectedClient, setV
                     <div className="bg-[#1c2127] p-4 rounded-lg">
                         <h3 className="text-lg font-semibold mb-2 text-gray-200">Personal Information</h3>
                         {Object.entries(formattedClient).map(([key, value]) => {
-                            if (key !== 'id') {
+                            if (key !== 'id' && value) {
                                 return (
                                     <p key={key} className="text-gray-300">
                                         <span className="font-medium text-gray-200">{key.charAt(0).toUpperCase() + key.slice(1)}:</span> {value}

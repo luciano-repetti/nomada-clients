@@ -26,6 +26,11 @@ const ClientSchema = new Schema({
         type: String,
         required: [true, 'Please provide an address'],
         trim: true,
+    },
+    company: {
+        type: Schema.Types.ObjectId,
+        ref: 'Company',
+        required: false
     }
 }, {
     timestamps: true
