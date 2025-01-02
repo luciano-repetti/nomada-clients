@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Company } from "@/components/company-management/types"
+import { formatDate } from "@/lib/utils";
 
 // Para visualización (strings)
 export type CompanyWithStringArrays = Omit<Company, 'emails' | 'phones' | '_id' | '__v'> & {
@@ -7,18 +8,37 @@ export type CompanyWithStringArrays = Omit<Company, 'emails' | 'phones' | '_id' 
     phones: string;
 }
 
+export type CompanyDetails = Omit<CompanyWithStringArrays, 'createdAt' | 'updatedAt'> & {
+    Creation: string;
+    Updated: string;
+}
+
 // Para edición/listado (arrays)
 export type FormattedCompany = Omit<Company, '__v' | '_id'>;
 
 // Para visualización individual
-export const formatCompanyData = (company: Company): CompanyWithStringArrays => {
-    const {_id, __v, ...companyRemaining} = company
+// export const formatCompanyData = (company: Company): CompanyWithStringArrays => {
+//     const {_id, __v, ...companyRemaining} = company
+
+//     return {
+//         ...companyRemaining,
+//         id: _id,
+//         emails: Array.isArray(company.emails) ? company.emails.join(", ") : company.emails,
+//         phones: Array.isArray(company.phones) ? company.phones.join(", ") : company.phones,
+//     }
+// }
+
+export const formatCompanyDetails = (company: Company): CompanyDetails => {
+    const {_id, __v, createdAt, updatedAt, ...companyRemaining} = company
 
     return {
         ...companyRemaining,
         id: _id,
         emails: Array.isArray(company.emails) ? company.emails.join(", ") : company.emails,
         phones: Array.isArray(company.phones) ? company.phones.join(", ") : company.phones,
+        Creation: formatDate(createdAt),
+        Updated: formatDate(updatedAt),
+            
     }
 }
 
@@ -29,5 +49,3 @@ export const formatCompanies = (companies: Company[]): FormattedCompany[] => {
         id: _id
     }));
 }
-
-export default formatCompanyData

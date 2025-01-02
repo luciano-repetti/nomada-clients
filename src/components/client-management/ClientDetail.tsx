@@ -77,7 +77,7 @@ export const ClientDetail: React.FC<ClientDetailProps> = ({ selectedClient, setV
                             if (key !== 'id' && value) {
                                 return (
                                     <p key={key} className="text-gray-300">
-                                        <span className="font-medium text-gray-200">{key.charAt(0).toUpperCase() + key.slice(1)}:</span> {value}
+                                        <span className="font-semibold text-gray-200">{key.charAt(0).toUpperCase() + key.slice(1)}:</span> {value}
                                     </p>
                                 )
                             }

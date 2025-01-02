@@ -9,7 +9,7 @@ export type ClientWithStringArrays = Omit<Client, 'emails' | 'phones' | '_id' | 
    companyName?: string; // Opcional ya que la compañía es opcional
 }
 
-export type ClientDetails = Omit<Client, '_id' | '__v' | 'company' | 'createdAt' | 'updatedAt'> & {
+export type ClientDetails = Omit<ClientWithStringArrays, 'createdAt' | 'updatedAt'> & {
     "Company name"?: string;
     Creation: string;
     Updated: string;
@@ -19,16 +19,16 @@ export type ClientDetails = Omit<Client, '_id' | '__v' | 'company' | 'createdAt'
 export type FormattedClient = Omit<Client, '__v' | '_id'>;
 
 // Para visualización individual
-export const formatClientData = (client: Client): ClientWithStringArrays => {
-   const {_id, __v, ...clientRemaining} = client
+// export const formatClientData = (client: Client): ClientWithStringArrays => {
+//    const {_id, __v, ...clientRemaining} = client
 
-   return {
-       ...clientRemaining,
-       id: _id,
-       emails: Array.isArray(client.emails) ? client.emails.join(", ") : client.emails,
-       phones: Array.isArray(client.phones) ? client.phones.join(", ") : client.phones,
-   }
-}
+//    return {
+//        ...clientRemaining,
+//        id: _id,
+//        emails: Array.isArray(client.emails) ? client.emails.join(", ") : client.emails,
+//        phones: Array.isArray(client.phones) ? client.phones.join(", ") : client.phones,
+//    }
+// }
 
 export const formatClientDetails = (client: Client) : ClientDetails => {
     const {_id, __v, company, createdAt, updatedAt, ...clientRemaining} = client
@@ -40,6 +40,8 @@ export const formatClientDetails = (client: Client) : ClientDetails => {
 
     return {
         ...clientRemaining,
+        emails: Array.isArray(client.emails) ? client.emails.join(", ") : client.emails,
+        phones: Array.isArray(client.phones) ? client.phones.join(", ") : client.phones,
         "Company name": companyName,
         Creation: formatDate(createdAt),
         Updated: formatDate(updatedAt),
@@ -53,5 +55,3 @@ export const formatClients = (clients: Client[]): FormattedClient[] => {
        id: _id
    }));
 }
-
-export default formatClientData

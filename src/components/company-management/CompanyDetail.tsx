@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Company, ModeView } from './types'
 import { useRouter } from 'next/navigation'
 import { ConfirmationDialog } from '../ui/confirmation-dialog'
-import formatCompanyData from '@/utils/formatCompany'
-import { formatDate } from '@/lib/utils'
+import { formatCompanyDetails } from '@/utils/formatCompany'
 
 interface CompanyDetailProps {
     selectedCompany: Company;
@@ -19,11 +18,7 @@ export const CompanyDetail: React.FC<CompanyDetailProps> = ({ selectedCompany, s
     const [showDialog, setShowDialog] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const formattedCompany = formatCompanyData(selectedCompany);
-    formattedCompany.createdAt = formatDate(formattedCompany.createdAt)
-    formattedCompany.updatedAt = formatDate(formattedCompany.updatedAt)
-
-    console.log(formattedCompany)
+    const formattedCompany = formatCompanyDetails(selectedCompany);
 
     const handleDelete = async () => {
         try {
@@ -81,7 +76,7 @@ export const CompanyDetail: React.FC<CompanyDetailProps> = ({ selectedCompany, s
                         if (key === 'id') return null;
                         return (
                             <p key={key} className="text-gray-300">
-                                <span className="font-medium text-gray-200">{key}:</span>{' '}
+                                <span className="font-semibold text-gray-200">{key}:</span>{' '}
                                 {value}
                             </p>
                         )

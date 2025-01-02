@@ -33,7 +33,6 @@ export const CompanyList: React.FC<CompanyListProps> = ({
                     <span
                         key={index}
                         className="text-sm text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis"
-                        style={{ maxWidth: '200px' }}
                     >
                         {value}
                     </span>

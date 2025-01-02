@@ -34,7 +34,6 @@ export const ClientList: React.FC<ClientListProps> = ({
                     <span
                         key={index}
                         className="text-sm text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis"
-                        style={{ maxWidth: '200px' }}
                     >
                         {value}
                     </span>
