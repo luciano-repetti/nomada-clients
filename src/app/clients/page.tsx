@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { ClientList } from '@/components/client-management/ClientList'
 import { useRouter } from 'next/navigation'
 import { formatClients, FormattedClient } from '@/utils/formatClient'
+import { fetchAuthorization } from '@/lib/fetchClient'
 
 export default function ClientsPage() {
     const router = useRouter();
@@ -14,29 +15,17 @@ export default function ClientsPage() {
     useEffect(() => {
         const fetchClients = async () => {
             try {
-                const token = localStorage.getItem('token_dashboard_nomada');
-                if (!token) {
-                    router.push('/login');
-                    return;
-                }
-
-                const response = await fetch('/api/clients', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+                const response = await fetchAuthorization('/api/clients');
 
                 if (!response.ok) {
                     throw new Error('Error al obtener los clientes');
                 }
-
 
                 const data = await response.json();
 
                 setClients(formatClients(data));
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error al cargar los clientes');
             } finally {
                 setIsLoading(false);
             }
@@ -61,7 +50,7 @@ export default function ClientsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-950 text-gray-100 p-8">
+        <div className="max-h-svh text-gray-100 p-8">
             <ClientList
                 clients={filteredClients}
                 searchTerm={searchTerm}

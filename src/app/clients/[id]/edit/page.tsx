@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { ClientForm } from '@/components/client-management/ClientForm'
 import { Client } from '@/components/client-management/types'
+import { fetchAuthorization } from '@/lib/fetchClient'
 
 export default function EditClientPage() {
     const params = useParams()
@@ -15,17 +16,7 @@ export default function EditClientPage() {
     useEffect(() => {
         const fetchClient = async () => {
             try {
-                const token = localStorage.getItem('token_dashboard_nomada');
-                if (!token) {
-                    router.push('/login');
-                    return;
-                }
-
-                const response = await fetch(`/api/clients/${params.id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+                const response = await fetchAuthorization(`/api/clients/${params.id}`);
 
                 if (!response.ok) {
                     const data = await response.json();

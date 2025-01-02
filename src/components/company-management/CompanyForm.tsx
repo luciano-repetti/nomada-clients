@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Company } from './types'
 import { InputChip } from '../ui/inputChip'
 import { useParams, useRouter } from 'next/navigation'
+import { fetchAuthorization } from '@/lib/fetchClient'
 
 interface CompanyFormProps {
     isEditing: boolean
@@ -63,13 +64,6 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ isEditing, selectedCom
     const handleSubmit = async () => {
         try {
             setIsLoading(true);
-            const token = localStorage.getItem('token_dashboard_nomada');
-
-            if (!token) {
-                router.push('/login');
-                return;
-            }
-
             const companyData: Partial<Company> = {
                 name: formData.name,
                 emails: formData.emails,
@@ -78,16 +72,15 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ isEditing, selectedCom
                 website: formData.website,
             };
 
-            const response = await fetch('/api/companies', {
+            const response = await fetchAuthorization('/api/companies', {
                 method: isEditing ? 'PUT' : 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
+                body: {
                     ...companyData,
                     ...(isEditing && { id: params.id })
-                })
+                }
             });
 
             if (!response.ok) {

@@ -7,6 +7,7 @@ import { Client, ModeView } from './types'
 import { formatClientDetails } from '@/utils/formatClient'
 import { ConfirmationDialog } from '../ui/confirmation-dialog'
 import { useRouter } from 'next/navigation'
+import { fetchAuthorization } from '@/lib/fetchClient'
 
 interface ClientDetailProps {
     selectedClient: Client;
@@ -23,19 +24,7 @@ export const ClientDetail: React.FC<ClientDetailProps> = ({ selectedClient, setV
     const handleDelete = async () => {
         try {
             setIsDeleting(true);
-            const token = localStorage.getItem('token_dashboard_nomada');
-
-            if (!token) {
-                router.push('/login');
-                return;
-            }
-
-            const response = await fetch(`/api/clients/${formattedClient.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const response = await fetchAuthorization(`/api/clients/${formattedClient.id}`);
 
             if (!response.ok) {
                 const data = await response.json();

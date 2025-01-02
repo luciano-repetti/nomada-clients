@@ -7,6 +7,7 @@ import { Company, ModeView } from './types'
 import { useRouter } from 'next/navigation'
 import { ConfirmationDialog } from '../ui/confirmation-dialog'
 import { formatCompanyDetails } from '@/utils/formatCompany'
+import { fetchAuthorization } from '@/lib/fetchClient'
 
 interface CompanyDetailProps {
     selectedCompany: Company;
@@ -23,18 +24,9 @@ export const CompanyDetail: React.FC<CompanyDetailProps> = ({ selectedCompany, s
     const handleDelete = async () => {
         try {
             setIsDeleting(true);
-            const token = localStorage.getItem('token_dashboard_nomada');
 
-            if (!token) {
-                router.push('/login');
-                return;
-            }
-
-            const response = await fetch(`/api/companies/${formattedCompany.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+            const response = await fetchAuthorization(`/api/companies/${formattedCompany.id}`, {
+                method: 'DELETE'
             });
 
             if (!response.ok) {

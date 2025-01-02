@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Option, StyledCustomSelect } from "../ui/input-list";
 import { Company } from "./types";
+import { fetchAuthorization } from "@/lib/fetchClient";
 
 export const CompanySelect: React.FC<{
     value?: string;
@@ -14,16 +15,7 @@ export const CompanySelect: React.FC<{
     useEffect(() => {
         const fetchCompanies = async () => {
             try {
-                const token = localStorage.getItem('token_dashboard_nomada');
-                if (!token) {
-                    throw new Error('No autorizado');
-                }
-
-                const response = await fetch('/api/companies', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+                const response = await fetchAuthorization('/api/companies');
 
                 if (!response.ok) {
                     throw new Error('Error al cargar las compañías');

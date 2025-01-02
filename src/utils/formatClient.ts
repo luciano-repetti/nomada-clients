@@ -40,6 +40,7 @@ export const formatClientDetails = (client: Client) : ClientDetails => {
 
     return {
         ...clientRemaining,
+        id: _id,
         emails: Array.isArray(client.emails) ? client.emails.join(", ") : client.emails,
         phones: Array.isArray(client.phones) ? client.phones.join(", ") : client.phones,
         "Company name": companyName,

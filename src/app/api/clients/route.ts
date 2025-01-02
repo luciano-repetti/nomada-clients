@@ -3,6 +3,7 @@ import { verify } from 'jsonwebtoken';
 import dbConnect from '@/lib/mongodb';
 import Client from '@/models/Client';
 import { isValidObjectId } from 'mongoose';
+import { headers } from 'next/headers';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
@@ -87,7 +88,7 @@ export async function PUT(request: Request) {
 
         // Obtener datos del body
         const body = await request.json();
-        const { id, name, emails, phones, address, company } = body;
+        const { id, name, emails, phones, position, address, company } = body;
 
         // Validar ID
         if (!id || !isValidObjectId(id)) {
@@ -98,7 +99,7 @@ export async function PUT(request: Request) {
         }
 
         // Validaciones básicas
-        if (!name || !emails.length || !phones.length || !address) {
+        if (!name || !emails.length || !phones.length || !address || !position) {
             return NextResponse.json(
                 { message: 'Todos los campos son requeridos' },
                 { status: 400 }
@@ -112,6 +113,7 @@ export async function PUT(request: Request) {
                 name,
                 emails,
                 phones,
+                position,
                 address,
                 company: company ? company : null
             },
@@ -138,6 +140,16 @@ export async function PUT(request: Request) {
 
 export async function GET() {
     try {
+        const headersList = headers();
+        const token = headersList.get('Authorization')?.split(' ')[1];
+
+        if (!token) {
+            return NextResponse.json(
+                { message: 'No autorizado' },
+                { status: 401 }
+            );
+        }
+
         // Conectar a la base de datos
         await dbConnect();
 
@@ -155,3 +167,4 @@ export async function GET() {
         );
     }
 }
+

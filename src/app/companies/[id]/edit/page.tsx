@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { CompanyForm } from '@/components/company-management/CompanyForm'
 import { Company } from '@/components/company-management/types'
+import { fetchAuthorization } from '@/lib/fetchClient'
 
 export default function EditCompanyPage() {
     const params = useParams()
@@ -15,17 +16,7 @@ export default function EditCompanyPage() {
     useEffect(() => {
         const fetchCompany = async () => {
             try {
-                const token = localStorage.getItem('token_dashboard_nomada');
-                if (!token) {
-                    router.push('/login');
-                    return;
-                }
-
-                const response = await fetch(`/api/companies/${params.id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+                const response = await fetchAuthorization(`/api/companies/${params.id}`);
 
                 if (!response.ok) {
                     const data = await response.json();

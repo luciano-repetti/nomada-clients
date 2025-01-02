@@ -5,10 +5,10 @@ import { Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/useAuth"
 
 export function LoginFormComponent() {
-  const router = useRouter();
+  const { login } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -33,38 +33,14 @@ export function LoginFormComponent() {
     event.preventDefault();
 
     try {
-      setIsLoading(true)
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Error en el login');
-      }
-
-      // Si el login es exitoso
-      if (data.token) {
-        // Guardamos el token en localStorage
-        localStorage.setItem('token_dashboard_nomada', data.token);
-        // Redirigimos a la página de clientes
-        router.push('/clients');
-      }
+      setIsLoading(true);
+      await login(formData.email, formData.password);
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Error en el login');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-950 p-4">

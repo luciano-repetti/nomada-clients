@@ -8,6 +8,7 @@ import { Client } from './types'
 import { InputChip } from '../ui/inputChip'
 import { useParams, useRouter } from 'next/navigation'
 import { CompanySelect } from '../company-management/CompanySelect'
+import { fetchAuthorization } from '@/lib/fetchClient'
 
 interface ClientFormProps {
     isEditing: boolean
@@ -72,13 +73,6 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
     const handleSubmit = async () => {
         try {
             setIsLoading(true);
-            const token = localStorage.getItem('token_dashboard_nomada');
-
-            if (!token) {
-                router.push('/');
-                return;
-            }
-
             const clientData: Partial<Client> = {
                 name: formData.name,
                 emails: formData.emails,
@@ -88,16 +82,15 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
                 company: formData.company,
             };
 
-            const response = await fetch('/api/clients', {
+            const response = await fetchAuthorization('/api/clients', {
                 method: isEditing ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({
+                body: {
                     ...clientData,
                     ...(isEditing && { id: params.id })
-                })
+                }
             });
 
             if (!response.ok) {

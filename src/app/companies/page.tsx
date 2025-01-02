@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { CompanyList } from '@/components/company-management/CompanyList'
 import { useRouter } from 'next/navigation'
 import { formatCompanies, FormattedCompany } from '@/utils/formatCompany'
+import { fetchAuthorization } from '@/lib/fetchClient'
 
 export default function CompaniesPage() {
     const router = useRouter();
@@ -14,17 +15,7 @@ export default function CompaniesPage() {
     useEffect(() => {
         const fetchCompanies = async () => {
             try {
-                const token = localStorage.getItem('token_dashboard_nomada');
-                if (!token) {
-                    router.push('/login');
-                    return;
-                }
-
-                const response = await fetch('/api/companies', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+                const response = await fetchAuthorization('/api/companies');
 
                 if (!response.ok) {
                     throw new Error('Error al obtener las compañías');
