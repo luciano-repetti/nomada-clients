@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
         // Obtener datos del body
         const body = await request.json();
-        const { name, emails, phones, address, company } = body;
+        const { name, emails, phones, address, position, company } = body;
 
         // Validaciones básicas
         if (!name || !emails.length || !phones.length || !address) {
@@ -62,6 +62,7 @@ export async function POST(request: Request) {
             emails,
             phones,
             address,
+            position,
             company
         });
 

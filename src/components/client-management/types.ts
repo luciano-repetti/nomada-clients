@@ -10,6 +10,7 @@ export interface Client {
     emails: string[];
     phones: string[];
     address: string;
+    position: string;
     company?: string | Company
     createdAt: string;
     updatedAt: string;

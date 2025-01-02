@@ -19,6 +19,7 @@ interface FormState {
     emails: string[];
     phones: string[];
     address: string;
+    position: string;
     company?: string;
 }
 
@@ -38,6 +39,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
                 emails: selectedClient.emails || [],
                 phones: selectedClient.phones || [],
                 address: selectedClient.address,
+                position: selectedClient.position,
                 company: companyId,
             }
         }
@@ -46,6 +48,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
             emails: [],
             phones: [],
             address: '',
+            position: '',
             company: undefined
         }
     });
@@ -81,6 +84,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
                 emails: formData.emails,
                 phones: formData.phones,
                 address: formData.address,
+                position: formData.position,
                 company: formData.company,
             };
 
@@ -122,7 +126,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
         return (
             <div className="space-y-2">
                 <label className="block text-sm text-gray-300">
-                    {label}s
+                    {label}s*
                 </label>
                 <InputChip
                     values={formData[field]}
@@ -153,7 +157,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
             <div className="space-y-4">
                 <div>
                     <label className="block text-sm text-gray-300 mb-2">
-                        Name
+                        Name*
                     </label>
                     <Input
                         value={formData.name}
@@ -162,17 +166,29 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
                 </div>
 
                 {renderChipField('emails')}
+
                 {renderChipField('phones')}
 
                 <div>
                     <label className="block text-sm text-gray-300 mb-2">
-                        Address
+                        Position*
+                    </label>
+                    <Input
+                        value={formData.position}
+                        onChange={(e) => handleChange('position', e.target.value)}
+                    />
+                </div>
+
+                <div>
+                    <label className="block text-sm text-gray-300 mb-2">
+                        Address*
                     </label>
                     <Input
                         value={formData.address}
                         onChange={(e) => handleChange('address', e.target.value)}
                     />
                 </div>
+
                 <CompanySelect
                     value={formData.company}
                     onChange={(value) => {

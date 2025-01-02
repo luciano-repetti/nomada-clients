@@ -43,7 +43,7 @@ export const StyledCustomSelect: React.FC<StyledCustomSelectProps> = ({
     return (
         <div className="w-full">
             <label className="block text-sm text-gray-300 mb-2">
-                {label} {isOptional && <span className="text-gray-400">(opcional)</span>}
+                {label} {isOptional && <span className="text-gray-400">(optional)</span>}
             </label>
             <div className="relative">
                 <input
