@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Building2, Users, User, LogOut } from 'lucide-react'
-import { useAuth } from "@/hooks/useAuth"  // Importar el hook
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,6 +13,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { useAuth } from "@/contexts/AuthContext"
+import Image from "next/image"
 
 const navItems = [
     { href: "/companies", label: "Companies", icon: Building2 },
@@ -24,12 +25,10 @@ export function Nav() {
     const pathname = usePathname()
     const { user, logout } = useAuth()
 
-    // Solo mostrar el Nav en rutas protegidas
     if (pathname === '/') {
         return null;
     }
 
-    // Obtener las iniciales del nombre en lugar del email
     const getInitials = (name: string) => {
         return name
             .split(' ')
@@ -43,23 +42,35 @@ export function Nav() {
         <header className="w-full px-8 pt-4 rounded-lg bg-gray-950">
             <div className="w-full bg-[#12151A]">
                 <div className="flex h-14 items-center justify-between rounded-lg px-4">
-                    <div className="flex gap-4">
-                        {navItems.map((item) => (
-                            <Button
-                                key={item.href}
-                                variant="ghost"
-                                asChild
-                                className={cn(
-                                    "gap-2 text-muted-foreground hover:text-primary",
-                                    pathname === item.href && "text-slate-100"
-                                )}
-                            >
-                                <Link href={item.href}>
-                                    <item.icon className="h-4 w-4" />
-                                    {item.label}
-                                </Link>
-                            </Button>
-                        ))}
+                    <div className="flex items-center gap-6">
+                        <div className="flex items-center h-14 pr-4">
+                            <Image
+                                src="/nomada_digital.png"
+                                width={50}
+                                height={40}
+                                alt="Nomada Digital Logo"
+                                className="object-contain h-12"
+                                priority
+                            />
+                        </div>
+                        <div className="flex gap-2">
+                            {navItems.map((item) => (
+                                <Button
+                                    key={item.href}
+                                    variant="ghost"
+                                    asChild
+                                    className={cn(
+                                        "gap-2 text-muted-foreground hover:text-primary",
+                                        pathname === item.href && "text-slate-100"
+                                    )}
+                                >
+                                    <Link href={item.href}>
+                                        <item.icon className="h-4 w-4" />
+                                        {item.label}
+                                    </Link>
+                                </Button>
+                            ))}
+                        </div>
                     </div>
 
                     <div className="flex items-center gap-2">
