@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { ClientForm } from '@/components/client-management/ClientForm'
-import { Client } from '@/components/client-management/types'
+import type { Client } from '@/components/client-management/types'
 import { fetchAuthorization } from '@/lib/fetchClient'
 
 export default function EditClientPage() {
@@ -34,7 +34,7 @@ export default function EditClientPage() {
             }
         };
 
-        fetchClient();
+        void fetchClient();
     }, [params.id, router]);
 
     if (isLoading) {

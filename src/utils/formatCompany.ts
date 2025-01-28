@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Company } from "@/components/company-management/types"
+import type { Company } from "@/components/company-management/types"
 import { formatDate } from "@/lib/utils";
 
 // Para visualización (strings)
@@ -15,18 +14,6 @@ export type CompanyDetails = Omit<CompanyWithStringArrays, 'createdAt' | 'update
 
 // Para edición/listado (arrays)
 export type FormattedCompany = Omit<Company, '__v' | '_id'>;
-
-// Para visualización individual
-// export const formatCompanyData = (company: Company): CompanyWithStringArrays => {
-//     const {_id, __v, ...companyRemaining} = company
-
-//     return {
-//         ...companyRemaining,
-//         id: _id,
-//         emails: Array.isArray(company.emails) ? company.emails.join(", ") : company.emails,
-//         phones: Array.isArray(company.phones) ? company.phones.join(", ") : company.phones,
-//     }
-// }
 
 export const formatCompanyDetails = (company: Company): CompanyDetails => {
     const {_id, __v, createdAt, updatedAt, ...companyRemaining} = company

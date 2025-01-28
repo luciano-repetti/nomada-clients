@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { CompanyList } from '@/components/company-management/CompanyList'
 import { useRouter } from 'next/navigation'
-import { formatCompanies, FormattedCompany } from '@/utils/formatCompany'
+import { formatCompanies } from '@/utils/formatCompany'
+import type { FormattedCompany } from '@/utils/formatCompany'
 import { fetchAuthorization } from '@/lib/fetchClient'
 
 export default function CompaniesPage() {
@@ -32,7 +33,7 @@ export default function CompaniesPage() {
             }
         };
 
-        fetchCompanies();
+        void fetchCompanies();
     }, [router]);
 
     const filteredCompanies = companies.filter(company =>

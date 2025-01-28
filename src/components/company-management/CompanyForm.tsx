@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { ChevronLeft } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Company } from './types'
+import type { Company } from './types'
 import { InputChip } from '../ui/inputChip'
 import { useParams, useRouter } from 'next/navigation'
 import { fetchAuthorization } from '@/lib/fetchClient'
@@ -170,7 +170,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ isEditing, selectedCom
             </div>
             <div className="mt-6">
                 <Button
-                    onClick={handleSubmit}
+                    onClick={() => void handleSubmit()}
                     className="w-full h-10 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700"
                 >
                     {isEditing ? isLoading ? 'Updating Company...' : 'Update Company' : isLoading ? 'adding Company...' : 'Add Company'}

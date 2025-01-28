@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { ClientList } from '@/components/client-management/ClientList'
 import { useRouter } from 'next/navigation'
-import { formatClients, FormattedClient } from '@/utils/formatClient'
+import type { FormattedClient } from '@/utils/formatClient'
+import { formatClients } from '@/utils/formatClient'
 import { fetchAuthorization } from '@/lib/fetchClient'
 
 export default function ClientsPage() {
@@ -13,7 +14,7 @@ export default function ClientsPage() {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const fetchClients = async () => {
+        void (async () => {
             try {
                 const response = await fetchAuthorization('/api/clients');
 
@@ -22,16 +23,13 @@ export default function ClientsPage() {
                 }
 
                 const data = await response.json();
-
                 setClients(formatClients(data));
             } catch (error) {
                 console.error('Error:', error);
             } finally {
                 setIsLoading(false);
             }
-        };
-
-        fetchClients();
+        })();
     }, [router]);
 
     const filteredClients = clients.filter(client =>

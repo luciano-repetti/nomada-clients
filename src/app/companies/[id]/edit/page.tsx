@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { CompanyForm } from '@/components/company-management/CompanyForm'
-import { Company } from '@/components/company-management/types'
+import type { Company } from '@/components/company-management/types'
 import { fetchAuthorization } from '@/lib/fetchClient'
 
 export default function EditCompanyPage() {
@@ -35,7 +35,7 @@ export default function EditCompanyPage() {
             }
         };
 
-        fetchCompany();
+        void fetchCompany();
     }, [params.id, router]);
 
     if (isLoading) {

@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ClientSearch } from './ClientSearch'
 import { formatDate } from '@/utils/formatDate'
 import Link from 'next/link'
-import { FormattedClient } from '@/utils/formatClient'
+import type { FormattedClient } from '@/utils/formatClient'
 
 interface ClientListProps {
     clients: FormattedClient[]

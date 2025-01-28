@@ -1,6 +1,7 @@
 "use client"
 
-import { FormEvent, useState } from "react"
+import { useState } from "react"
+import type { FormEvent } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -59,7 +60,7 @@ export function LoginFormComponent() {
           <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
           <p className="text-gray-400">Enter your credentials to access your account</p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleForm}>
+        <form className="mt-8 space-y-6" onSubmit={(e) => void handleForm(e)}>
           <div className="space-y-1">
             <Label htmlFor="email" className="text-white">Email or Username</Label>
             <Input

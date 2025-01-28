@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Client } from "@/components/client-management/types"
+import type { Client } from "@/components/client-management/types"
 import { formatDate } from "@/lib/utils";
 
 // Para visualización (strings)
@@ -17,18 +17,6 @@ export type ClientDetails = Omit<ClientWithStringArrays, 'createdAt' | 'updatedA
 
 // Para edición/listado (arrays)
 export type FormattedClient = Omit<Client, '__v' | '_id'>;
-
-// Para visualización individual
-// export const formatClientData = (client: Client): ClientWithStringArrays => {
-//    const {_id, __v, ...clientRemaining} = client
-
-//    return {
-//        ...clientRemaining,
-//        id: _id,
-//        emails: Array.isArray(client.emails) ? client.emails.join(", ") : client.emails,
-//        phones: Array.isArray(client.phones) ? client.phones.join(", ") : client.phones,
-//    }
-// }
 
 export const formatClientDetails = (client: Client) : ClientDetails => {
     const {_id, __v, company, createdAt, updatedAt, ...clientRemaining} = client

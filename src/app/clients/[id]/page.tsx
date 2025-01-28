@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { ClientDetail } from '@/components/client-management/ClientDetail'
-import { Client } from '@/components/client-management/types'
+import type { Client } from '@/components/client-management/types'
 import { fetchAuthorization } from '@/lib/fetchClient'
 
 export default function ClientDetailPage() {
@@ -35,7 +35,7 @@ export default function ClientDetailPage() {
             }
         };
 
-        fetchClient();
+        void fetchClient();
     }, [params.id, router]);
 
     if (isLoading) {

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { CompanyDetail } from '@/components/company-management/CompanyDetail'
-import { Company } from '@/components/company-management/types'
+import type { Company } from '@/components/company-management/types'
 import { fetchAuthorization } from '@/lib/fetchClient'
 
 export default function CompanyDetailPage() {
@@ -35,7 +35,7 @@ export default function CompanyDetailPage() {
             }
         };
 
-        fetchCompany();
+        void fetchCompany();
     }, [params.id, router]);
 
     if (isLoading) {

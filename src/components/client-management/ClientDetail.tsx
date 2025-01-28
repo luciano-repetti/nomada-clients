@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { ChevronLeft, Edit, Trash2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
-import { Client, ModeView } from './types'
+import type { Client, ModeView } from './types'
 import { formatClientDetails } from '@/utils/formatClient'
 import { ConfirmationDialog } from '../ui/confirmation-dialog'
 import { useRouter } from 'next/navigation'
@@ -99,7 +99,7 @@ export const ClientDetail: React.FC<ClientDetailProps> = ({ selectedClient, setV
             <ConfirmationDialog
                 isOpen={showDialog}
                 onClose={() => setShowDialog(false)}
-                onConfirm={handleDelete}
+                onConfirm={() => void handleDelete()}
                 title="¿Está seguro que desea eliminar?"
                 description="Esta acción eliminará permanentemente el cliente y no se puede deshacer."
             />

@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { CompanySearch } from './CompanySearch'
 import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
-import { FormattedCompany } from '@/utils/formatCompany'
+import type { FormattedCompany } from '@/utils/formatCompany'
 
 interface CompanyListProps {
     companies: FormattedCompany[]

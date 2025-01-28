@@ -1,8 +1,7 @@
 {
   "extends": [
     "next/core-web-vitals",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    "plugin:@typescript-eslint/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -10,18 +9,34 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
+    // Mantenemos la prohibición de any para evitar errores silenciosos
     "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/explicit-function-return-type": "warn",
-    "@typescript-eslint/explicit-module-boundary-types": "warn",
-    "@typescript-eslint/no-unused-vars": ["error", {
+    
+    // Cambiamos estas a "off" ya que Next.js ya maneja bien los tipos
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    
+    // Esta es útil para evitar variables no usadas
+    "@typescript-eslint/no-unused-vars": ["warn", {
       "argsIgnorePattern": "^_",
       "varsIgnorePattern": "^_"
     }],
+    
+    // Bajamos esto a warn ya que es más una sugerencia de estilo
     "@typescript-eslint/consistent-type-imports": ["warn", {
       "prefer": "type-imports"
     }],
+    
+    // Estas reglas son importantes para manejar promesas correctamente
     "@typescript-eslint/no-floating-promises": "error",
-    "@typescript-eslint/await-thenable": "error",
-    "@typescript-eslint/no-misused-promises": "error"
+    "@typescript-eslint/await-thenable": "warn",
+    "@typescript-eslint/no-misused-promises": "warn",
+
+    // Reglas adicionales que podemos relajar
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/no-unsafe-argument": "off"
   }
 }

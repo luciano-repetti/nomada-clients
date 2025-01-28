@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { ChevronLeft } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Client } from './types'
+import type { Client } from './types'
 import { InputChip } from '../ui/inputChip'
 import { useParams, useRouter } from 'next/navigation'
 import { CompanySelect } from '../company-management/CompanySelect'
@@ -73,13 +73,15 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
     const handleSubmit = async () => {
         try {
             setIsLoading(true);
-            const clientData: Partial<Client> = {
+            // Asegurarse de que company sea solo el ID
+            const bodyData = {
                 name: formData.name,
                 emails: formData.emails,
                 phones: formData.phones,
                 address: formData.address,
                 position: formData.position,
-                company: formData.company,
+                company: formData.company, // Ya es un string por FormState
+                ...(isEditing && { id: params.id })
             };
 
             const response = await fetchAuthorization('/api/clients', {
@@ -87,10 +89,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: {
-                    ...clientData,
-                    ...(isEditing && { id: params.id })
-                }
+                body: bodyData
             });
 
             if (!response.ok) {
@@ -99,12 +98,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
                 throw new Error('Error al guardar el cliente');
             }
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Error al guardar el cliente');
-            }
-
+            // const data = await response.json();
             router.push('/clients');
         } catch (error) {
             alert(error instanceof Error ? error.message : 'Error al guardar el cliente');
@@ -112,7 +106,6 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
             setIsLoading(false);
         }
     };
-
 
     const renderChipField = (field: 'emails' | 'phones') => {
         const label = field === 'emails' ? 'Email' : 'Phone'
@@ -195,7 +188,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ isEditing, selectedClien
             </div>
             <div className="mt-6">
                 <Button
-                    onClick={handleSubmit}
+                    onClick={() => void handleSubmit()}
                     disabled={isLoading}
                     className="w-full h-10 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white rounded-md"
                 >

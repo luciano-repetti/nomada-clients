@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { ChevronLeft, Edit, Trash2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
-import { Company, ModeView } from './types'
+import type { Company, ModeView } from './types'
 import { useRouter } from 'next/navigation'
 import { ConfirmationDialog } from '../ui/confirmation-dialog'
 import { formatCompanyDetails } from '@/utils/formatCompany'
@@ -99,7 +99,7 @@ export const CompanyDetail: React.FC<CompanyDetailProps> = ({ selectedCompany, s
             <ConfirmationDialog
                 isOpen={showDialog}
                 onClose={() => setShowDialog(false)}
-                onConfirm={handleDelete}
+                onConfirm={() => void handleDelete()}
                 title="¿Está seguro que desea eliminar?"
                 description="Esta acción eliminará permanentemente la compañía y no se puede deshacer."
             />

@@ -21,4 +21,4 @@ async function createInitialUser() {
   process.exit();
 }
 
-createInitialUser();
+void createInitialUser();

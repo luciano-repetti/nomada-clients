@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Option, StyledCustomSelect } from "../ui/input-list";
-import { Company } from "./types";
+import type { Option } from "../ui/input-list";
+import { StyledCustomSelect } from "../ui/input-list";
+import type { Company } from "./types";
 import { fetchAuthorization } from "@/lib/fetchClient";
 
 export const CompanySelect: React.FC<{
@@ -36,7 +37,7 @@ export const CompanySelect: React.FC<{
             }
         };
 
-        fetchCompanies();
+        void fetchCompanies();
     }, []);
 
     return (
